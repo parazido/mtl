@@ -47,3 +47,6 @@ _deps
 
 # Common
 build
+
+# VSCode
+.vscode
