@@ -28,7 +28,7 @@ set(TESTS_SOURCE_LIST
     ${CMAKE_CURRENT_SOURCE_DIR}/parameters.test.cpp)
 add_executable(${BINARY} ${TESTS_SOURCE_LIST})
 
-target_link_libraries(${BINARY} PRIVATE CONAN_PKG::catch2 mtl::common)
+target_link_libraries(${BINARY} PRIVATE CONAN_PKG::catch2 mtl::${LIBRARY})
 
 add_test(NAME ${BINARY}
     COMMAND ${BINARY} -r junit)
