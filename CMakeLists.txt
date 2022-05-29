@@ -9,3 +9,4 @@ include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup(NO_OUTPUT_DIRS TARGETS)
 
 add_subdirectory(${PROJECT_HOME_DIR}/common)
+add_subdirectory(${PROJECT_HOME_DIR}/traits)
