@@ -8,5 +8,6 @@ set(PROJECT_HOME_DIR ${PROJECT_SOURCE_DIR}/${PROJECT_NAME})
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup(NO_OUTPUT_DIRS TARGETS)
 
+add_subdirectory(${PROJECT_HOME_DIR}/algorithm)
 add_subdirectory(${PROJECT_HOME_DIR}/common)
 add_subdirectory(${PROJECT_HOME_DIR}/traits)
