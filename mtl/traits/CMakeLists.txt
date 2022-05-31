@@ -10,7 +10,8 @@ add_library(${LIBRARY} INTERFACE)
 add_library(mtl::${LIBRARY} ALIAS ${LIBRARY})
 
 set(SOURCE_LIST
-    ${CMAKE_CURRENT_SOURCE_DIR}/list.hpp)
+    ${CMAKE_CURRENT_SOURCE_DIR}/list.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/types.hpp)
 target_sources(${LIBRARY} INTERFACE ${SOURCE_LIST})
 
 include(GNUInstallDirs)
@@ -19,13 +20,16 @@ target_include_directories(
     $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}>
     $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 
+target_link_libraries(${LIBRARY} INTERFACE mtl::common)
+
 # Configure testing project.
 enable_testing()
 set(BINARY ${PROJECT_NAME}_test)
 
 set(TESTS_SOURCE_LIST
     ${CMAKE_CURRENT_SOURCE_DIR}/main.test.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/list.test.cpp)
+    ${CMAKE_CURRENT_SOURCE_DIR}/list.test.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/types.test.cpp)
 add_executable(${BINARY} ${TESTS_SOURCE_LIST})
 
 target_link_libraries(${BINARY} PRIVATE CONAN_PKG::catch2 mtl::${LIBRARY})
