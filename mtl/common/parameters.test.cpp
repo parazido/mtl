@@ -24,6 +24,17 @@ TEST_CASE("Both `find` and `find_value` are initialized with `void` type for an 
     >::value);    
 }
 
+TEST_CASE("Both `find` and `find_value` are initialized with default type for an empty set of parameters if specified.") {
+    REQUIRE(
+        std::is_same<mtl::parameters<>::template find<value_template_1, value_template_1<0>>::type,
+        value_template_1<0>
+    >::value);
+    
+    REQUIRE(
+        std::is_same<mtl::parameters<>::template find_type<type_template_1, type_template_1<void>>::type,
+        type_template_1<void>
+    >::value);
+}
 
 TEST_CASE("Both `find` and `find_value` are initialized with `void` if no matching parameter is found in a single parameter set.") {
     CHECK(std::is_same<

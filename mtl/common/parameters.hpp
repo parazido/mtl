@@ -27,32 +27,40 @@ namespace mtl {
         };
         
         struct find_parameter_in_set {
-            template<template<class...> class t_template_type, class t_first, class... t_rest>
+            template<template<class...> class t_template_type, class t_default, class t_first, class... t_rest>
             static auto evaluate() {
-                return typename std::add_pointer<typename std::conditional<
-                    types_has_same_enclosure<t_template_type, t_first>::value,
-                    t_first,
-                    typename std::remove_pointer<decltype(find_parameter_in_set::evaluate<t_template_type, t_rest...>())>::type
-                >::type>::type{};
+                return typename std::add_pointer<
+                    typename std::conditional<
+                        types_has_same_enclosure<t_template_type, t_first>::value,
+                        t_first,
+                        typename std::remove_pointer<
+                            decltype(find_parameter_in_set::evaluate<t_template_type, t_default, t_rest...>())
+                        >::type
+                    >::type
+                >::type{};
             }
             
-            template<template<class...> class t_template_type>
+            template<template<class...> class t_template_type, class t_default>
             static auto evaluate() {
-                return typename std::add_pointer<void>::type{};
+                return typename std::add_pointer<t_default>::type{};
             }
             
-            template<template<auto...> class t_template_type, class t_first, class... t_rest>
+            template<template<auto...> class t_template_type, class t_default, class t_first, class... t_rest>
             static auto evaluate() {
-                return typename std::add_pointer<typename std::conditional<
-                    values_has_same_enclosure<t_template_type, t_first>::value,
-                    t_first,
-                    typename std::remove_pointer<decltype(find_parameter_in_set::evaluate<t_template_type, t_rest...>())>::type
-                >::type>::type{};
+                return typename std::add_pointer<
+                    typename std::conditional<
+                        values_has_same_enclosure<t_template_type, t_first>::value,
+                        t_first,
+                        typename std::remove_pointer<
+                            decltype(find_parameter_in_set::evaluate<t_template_type, t_default, t_rest...>())
+                        >::type
+                    >::type
+                >::type{};
             }
             
-            template<template<auto...> class t_template_type>
+            template<template<auto...> class t_template_type, class t_default>
             static auto evaluate() {
-                return typename std::add_pointer<void>::type{};
+                return typename std::add_pointer<t_default>::type{};
             }
         };
     }
@@ -60,14 +68,18 @@ namespace mtl {
     
     template<class... t_parameters>
     struct parameters {
-        template<template<auto...> class t_template_type>
+        template<template<auto...> class t_template_type, class t_default = void>
         struct find {
-            using type = typename std::remove_pointer<decltype(detail::find_parameter_in_set::evaluate<t_template_type, t_parameters...>())>::type;
+            using type = typename std::remove_pointer<
+                decltype(detail::find_parameter_in_set::evaluate<t_template_type, t_default, t_parameters...>())
+            >::type;
         };
         
-        template<template<class...> class t_template_type>
+        template<template<class...> class t_template_type, class t_default = void>
         struct find_type {
-            using type = typename std::remove_pointer<decltype(detail::find_parameter_in_set::evaluate<t_template_type, t_parameters...>())>::type;
+            using type = typename std::remove_pointer<
+                decltype(detail::find_parameter_in_set::evaluate<t_template_type, t_default, t_parameters...>())
+            >::type;
         };
     };
 }
