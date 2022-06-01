@@ -12,7 +12,7 @@ namespace mtl {
 
         struct operators {
             struct set {};
-            template <uint8_t> struct set_from {};
+            template <uint8_t...> struct set_from {};
             template <uint8_t> struct set_to {};
         };
 
@@ -49,6 +49,14 @@ namespace mtl {
             using underlying_type = decltype(v_value);
             constexpr static underlying_type value
                 = build_mask_by_range<underlying_type, v_srart_index, sizeof(underlying_type) * 8>::value;
+        };
+
+        // TODO: add unit test.
+        template <auto v_value, uint8_t v_srart_index, uint8_t v_end_index>
+        struct apply_operator<v_value, bmp::operators::set_from<v_srart_index, v_end_index>> {
+            using underlying_type = decltype(v_value);
+            constexpr static underlying_type value
+                = build_mask_by_range<underlying_type, v_srart_index, v_end_index>::value;
         };
 
         template <auto v_value, uint8_t v_end_index>
