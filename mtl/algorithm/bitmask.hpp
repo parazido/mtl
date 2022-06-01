@@ -1,4 +1,5 @@
 #pragma once
+#include <cstdint>
 
 #include <mtl/common/parameters.hpp>
 #include <mtl/traits/list.hpp>
