@@ -10,4 +10,5 @@ conan_basic_setup(NO_OUTPUT_DIRS TARGETS)
 
 add_subdirectory(${PROJECT_HOME_DIR}/algorithm)
 add_subdirectory(${PROJECT_HOME_DIR}/common)
+add_subdirectory(${PROJECT_HOME_DIR}/math)
 add_subdirectory(${PROJECT_HOME_DIR}/traits)
