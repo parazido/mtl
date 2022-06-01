@@ -1,8 +1,8 @@
 #include <type_traits>
-#include <catch2/catch.hpp>
+
 #include <mtl/traits/list.hpp>
 
-
+#include <catch2/catch.hpp>
 
 TEST_CASE("List length is the same as number of its elements.") {
     CHECK(mtl::traits::list<>::length == 0);
