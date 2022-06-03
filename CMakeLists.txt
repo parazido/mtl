@@ -3,6 +3,8 @@ project(mtl)
 
 set(CMAKE_CXX_STANDARD 17)
 
+set(USE_TESTS ON)
+
 set(PROJECT_HOME_DIR ${PROJECT_SOURCE_DIR}/${PROJECT_NAME})
 
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)

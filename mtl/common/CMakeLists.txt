@@ -20,15 +20,17 @@ target_include_directories(
     $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 
 # Configure testing project.
-enable_testing()
-set(BINARY ${PROJECT_NAME}_test)
+if(USE_TESTS)
+    enable_testing()
+    set(BINARY ${PROJECT_NAME}_test)
 
-set(TESTS_SOURCE_LIST
-    ${CMAKE_CURRENT_SOURCE_DIR}/main.test.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/parameters.test.cpp)
-add_executable(${BINARY} ${TESTS_SOURCE_LIST})
+    set(TESTS_SOURCE_LIST
+        ${CMAKE_CURRENT_SOURCE_DIR}/main.test.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/parameters.test.cpp)
+    add_executable(${BINARY} ${TESTS_SOURCE_LIST})
 
-target_link_libraries(${BINARY} PRIVATE CONAN_PKG::catch2 mtl::${LIBRARY})
+    target_link_libraries(${BINARY} PRIVATE CONAN_PKG::catch2 mtl::${LIBRARY})
 
-add_test(NAME ${BINARY}
-    COMMAND ${BINARY} -r junit)
+    add_test(NAME ${BINARY}
+        COMMAND ${BINARY} -r junit)
+endif()
