@@ -418,7 +418,7 @@ namespace devices {
                     constexpr static option set = 1;
                 };
 
-                struct bg : mtl::hw::field<egr, 4, 1> {
+                struct bg : mtl::hw::field<egr, 7, 1> {
                     using option = mtl::hw::option<bg>;
                     constexpr static option set = 1;
                 };

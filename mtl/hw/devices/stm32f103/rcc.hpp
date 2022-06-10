@@ -255,7 +255,7 @@ namespace devices {
                 struct ahbrstr : register_<0x28, uint32_t> {};
 
                 struct cfgr2 : register_<0x2c, uint32_t> {
-                    struct prediv1 : mtl::hw::field<cfgr, 0, 4> {
+                    struct prediv1 : mtl::hw::field<cfgr2, 0, 4> {
                         using option = mtl::hw::option<prediv1>;
                         constexpr static option nodiv = 0;
                         constexpr static option div2 = 1;
@@ -275,7 +275,7 @@ namespace devices {
                         constexpr static option div16 = 15;
                     };
 
-                    struct prediv2 : mtl::hw::field<cfgr, 4, 4> {
+                    struct prediv2 : mtl::hw::field<cfgr2, 4, 4> {
                         using option = mtl::hw::option<prediv2>;
                         constexpr static option nodiv = 0;
                         constexpr static option div2 = 1;
@@ -295,7 +295,7 @@ namespace devices {
                         constexpr static option div16 = 15;
                     };
 
-                    struct pll2mul : mtl::hw::field<cfgr, 8, 4> {
+                    struct pll2mul : mtl::hw::field<cfgr2, 8, 4> {
                         using option = mtl::hw::option<pll2mul>;
                         constexpr static option mul8 = 6;
                         constexpr static option mul9 = 7;
@@ -308,7 +308,7 @@ namespace devices {
                         constexpr static option mul20 = 15;
                     };
 
-                    struct pll3mul : mtl::hw::field<cfgr, 12, 4> {
+                    struct pll3mul : mtl::hw::field<cfgr2, 12, 4> {
                         using option = mtl::hw::option<pll3mul>;
                         constexpr static option mul8 = 6;
                         constexpr static option mul9 = 7;
@@ -321,19 +321,19 @@ namespace devices {
                         constexpr static option mul20 = 15;
                     };
 
-                    struct prediv1src : mtl::hw::field<cfgr, 16, 1> {
+                    struct prediv1src : mtl::hw::field<cfgr2, 16, 1> {
                         using option = mtl::hw::option<prediv1src>;
                         constexpr static option hse = 0;
                         constexpr static option pll2 = 1;
                     };
 
-                    struct i2s2src : mtl::hw::field<cfgr, 17, 1> {
+                    struct i2s2src : mtl::hw::field<cfgr2, 17, 1> {
                         using option = mtl::hw::option<i2s2src>;
                         constexpr static option sysclk = 0;
                         constexpr static option pll3 = 1;
                     };
 
-                    struct i2s3src : mtl::hw::field<cfgr, 18, 1> {
+                    struct i2s3src : mtl::hw::field<cfgr2, 18, 1> {
                         using option = mtl::hw::option<i2s3src>;
                         constexpr static option sysclk = 0;
                         constexpr static option pll3 = 1;

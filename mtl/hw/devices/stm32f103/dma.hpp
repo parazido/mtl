@@ -127,7 +127,7 @@ namespace devices {
                     constexpr static option low = 0;
                     constexpr static option medium = 1;
                     constexpr static option high = 2;
-                    constexpr static option bits32 = 3;
+                    constexpr static option very_high = 3;
                 };
 
                 struct mem2mem : mtl::hw::field<ccr, 14, 1> {
