@@ -16,6 +16,7 @@ endif()
 
 add_subdirectory(${PROJECT_HOME_DIR}/algorithm)
 add_subdirectory(${PROJECT_HOME_DIR}/common)
+add_subdirectory(${PROJECT_HOME_DIR}/containers)
 add_subdirectory(${PROJECT_HOME_DIR}/hw)
 add_subdirectory(${PROJECT_HOME_DIR}/traits)
 add_subdirectory(${PROJECT_HOME_DIR}/units)
