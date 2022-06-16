@@ -44,4 +44,13 @@ namespace mtl::traits {
     template <class t_type, class... t_list_types> struct is_in<list<t_list_types...>, t_type> {
         constexpr static bool value = (std::is_same<t_list_types, t_type>::value | ...);
     };
+
+    // Find element by index.
+    template <size_t v_index, class t_list> struct find_by_index {
+        using type = typename find_by_index<v_index - 1, typename t_list::next>::type;
+    };
+
+    template <class t_list> struct find_by_index<0, t_list> {
+        using type = typename t_list::type;
+    };
 } // namespace mtl::traits
