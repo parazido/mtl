@@ -4,7 +4,7 @@
 
 #include <mtl/hw/device.hpp>
 
-namespace devices {
+namespace mtl::hw {
     namespace descriptor {
         template <uint32_t v_base_address> struct afio {
             constexpr static uint32_t base_address = v_base_address;
@@ -36,9 +36,9 @@ namespace devices {
                     constexpr static option no = 0;
                     constexpr static option remap = 1;
                 };
-
-                struct 12c1_remap : mtl::hw::field<mapr, 1, 1> {
-                    using option = mtl::hw::option<12c1_remap>;
+                
+                struct i2c1_remap : mtl::hw::field<mapr, 1, 1> {
+                    using option = mtl::hw::option<i2c1_remap>;
                     constexpr static option no = 0;
                     constexpr static option remap = 1;
                 };
@@ -188,4 +188,4 @@ namespace devices {
     } // namespace descriptor
 
     using afio = descriptor::afio<0x40010000>;
-} // namespace devices
+} // namespace mtl::hw
