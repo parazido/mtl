@@ -9,7 +9,7 @@ set(LIBRARY ${PROJECT_NAME})
 add_library(${LIBRARY} INTERFACE)
 add_library(mtl::${LIBRARY} ALIAS ${LIBRARY})
 
-set(INCLUDE_DIRS ${CMAKE_SOURCE_DIR})
+set(INCLUDE_DIRS ${LIBRARY_DIR})
 
 set(SOURCE_LIST
     "${CMAKE_CURRENT_SOURCE_DIR}/device.hpp")

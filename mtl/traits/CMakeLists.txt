@@ -17,7 +17,7 @@ target_sources(${LIBRARY} INTERFACE ${SOURCE_LIST})
 include(GNUInstallDirs)
 target_include_directories(
     ${LIBRARY} INTERFACE
-    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}>
+    $<BUILD_INTERFACE:${LIBRARY_DIR}>
     $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 
 target_link_libraries(${LIBRARY} INTERFACE mtl::common)
