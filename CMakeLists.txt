@@ -17,6 +17,7 @@ endif()
 set(LIBRARY_DIR ${PROJECT_SOURCE_DIR})
 
 add_subdirectory(${PROJECT_HOME_DIR}/algorithm)
+add_subdirectory(${PROJECT_HOME_DIR}/buffers)
 add_subdirectory(${PROJECT_HOME_DIR}/common)
 add_subdirectory(${PROJECT_HOME_DIR}/containers)
 add_subdirectory(${PROJECT_HOME_DIR}/hw)
