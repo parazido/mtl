@@ -23,6 +23,8 @@ namespace mtl {
             public tuple_leaf<v_indexes, t_parameters>... {
         public:
             using types = mtl::traits::list<t_parameters...>;
+            constexpr static size_t size = types::length;
+            
             tuple(t_parameters &&... values)
                 : tuple_leaf<v_indexes, t_parameters>(std::forward<t_parameters>(values))... {}
 
