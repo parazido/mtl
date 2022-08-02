@@ -2,9 +2,10 @@
 
 #include <cstdint>
 
+#include <mtl/hw/descriptor.hpp>
 #include <mtl/hw/device.hpp>
 
-namespace devices {
+namespace mtl::hw {
     namespace descriptor {
         template <uint32_t v_base_address> struct gpio {
             constexpr static uint32_t base_address = v_base_address;
@@ -89,4 +90,14 @@ namespace devices {
     using gpioe = descriptor::gpio<0x40011800>;
     using gpiof = descriptor::gpio<0x40011c00>;
     using gpiog = descriptor::gpio<0x40012000>;
-} // namespace devices
+
+    template <class t_device_id> struct gpio;
+    template <> struct gpio<mtl::hw::ids::gpioa> : gpioa {};
+    template <> struct gpio<mtl::hw::ids::gpiob> : gpiob {};
+    template <> struct gpio<mtl::hw::ids::gpioc> : gpioc {};
+    template <> struct gpio<mtl::hw::ids::gpiod> : gpiod {};
+    template <> struct gpio<mtl::hw::ids::gpioe> : gpioe {};
+    template <> struct gpio<mtl::hw::ids::gpiof> : gpiof {};
+    template <> struct gpio<mtl::hw::ids::gpiog> : gpiog {};
+
+} // namespace mtl::hw
