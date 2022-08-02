@@ -4,7 +4,7 @@
 
 #include <mtl/hw/device.hpp>
 
-namespace devices {
+namespace mtl::hw {
     namespace descriptor {
         template <uint32_t v_base_address> struct timer_1 {
             constexpr static uint32_t base_address = v_base_address;
@@ -905,8 +905,8 @@ namespace devices {
 
                 struct dir : mtl::hw::field<cr1, 4, 1> {
                     using option = mtl::hw::option<dir>;
-                    constexpr static option upcount = 0;
-                    constexpr static option downcount = 1;
+                    constexpr static option up = 0;
+                    constexpr static option down = 1;
                 };
 
                 struct cms : mtl::hw::field<cr1, 5, 2> {
@@ -1200,7 +1200,7 @@ namespace devices {
                 struct tg : mtl::hw::field<egr, 6, 1> {
                     using option = mtl::hw::option<tg>;
                     constexpr static option set = 1;
-                } ж
+                };
             };
 
             struct ccmr1 : register_<0x18, uint32_t> {
@@ -2689,4 +2689,15 @@ namespace devices {
     using timer15 = descriptor::timer_15<0x40014000>;
     using timer16 = descriptor::timer_16_17<0x40014400>;
     using timer17 = descriptor::timer_16_17<0x40014800>;
-} // namespace devices
+
+    template <class> struct timer;
+    template <> struct timer<mtl::hw::ids::timer1> : timer1 {};
+    template <> struct timer<mtl::hw::ids::timer2> : timer2 {};
+    template <> struct timer<mtl::hw::ids::timer3> : timer3 {};
+    template <> struct timer<mtl::hw::ids::timer6> : timer6 {};
+    template <> struct timer<mtl::hw::ids::timer7> : timer7 {};
+    template <> struct timer<mtl::hw::ids::timer14> : timer14 {};
+    template <> struct timer<mtl::hw::ids::timer15> : timer15 {};
+    template <> struct timer<mtl::hw::ids::timer16> : timer16 {};
+    template <> struct timer<mtl::hw::ids::timer17> : timer17 {};
+} // namespace mtl::hw
