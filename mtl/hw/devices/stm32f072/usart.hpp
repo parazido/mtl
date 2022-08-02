@@ -6,7 +6,7 @@
 
 #include <mtl/hw/device.hpp>
 
-namespace devices {
+namespace mtl::hw {
     namespace descriptor {
         template <uint32_t v_base_address> struct usart {
             constexpr static uint32_t base_address = v_base_address;
@@ -86,7 +86,7 @@ namespace devices {
                     constexpr static option address = 1;
                 };
 
-                struct m1 : mtl::hw::field<cr1, 12, 1> {};
+                struct m0 : mtl::hw::field<cr1, 12, 1> {};
 
                 struct over8 : mtl::hw::field<cr1, 15, 1> {
                     using option = mtl::hw::option<over8>;
@@ -591,4 +591,14 @@ namespace devices {
     using usart6 = descriptor::usart<0x40011400>;
     using usart7 = descriptor::usart<0x40011800>;
     using usart8 = descriptor::usart<0x40011C00>;
-} // namespace devices
+
+    template <class> struct usart;
+    template <> struct usart<mtl::hw::ids::usart1> : usart1 {};
+    template <> struct usart<mtl::hw::ids::usart2> : usart2 {};
+    template <> struct usart<mtl::hw::ids::usart3> : usart3 {};
+    template <> struct usart<mtl::hw::ids::usart4> : usart4 {};
+    template <> struct usart<mtl::hw::ids::usart5> : usart5 {};
+    template <> struct usart<mtl::hw::ids::usart6> : usart6 {};
+    template <> struct usart<mtl::hw::ids::usart7> : usart7 {};
+    template <> struct usart<mtl::hw::ids::usart8> : usart8 {};
+} // namespace mtl::hw
