@@ -4,7 +4,7 @@
 
 #include <mtl/hw/device.hpp>
 
-namespace devices {
+namespace mtl::hw {
     namespace descriptor {
         template <uint32_t v_base_address> struct adc {
             constexpr static uint32_t base_address = v_base_address;
@@ -17,7 +17,7 @@ namespace devices {
                     constexpr static option inactive = 0;
                     constexpr static option active = 1;
                 };
-                
+
                 struct eosmp : mtl::hw::field<isr, 1, 1> {
                     using option = mtl::hw::option<eosmp>;
                     constexpr static option inactive = 0;
@@ -55,7 +55,7 @@ namespace devices {
                     constexpr static option disabled = 0;
                     constexpr static option enabled = 1;
                 };
-                
+
                 struct eosmpie : mtl::hw::field<ier, 1, 1> {
                     using option = mtl::hw::option<eosmpie>;
                     constexpr static option disabled = 0;
@@ -117,7 +117,6 @@ namespace devices {
                     constexpr static option in_progress = 1;
                 };
             };
-
 
             struct cfgr1 : register_<0x0c, uint32_t> {
                 struct dmaen : mtl::hw::field<cfgr1, 0, 1> {
@@ -227,7 +226,7 @@ namespace devices {
             };
 
             struct smpr : register_<0x14, uint32_t> {
-                struct smp : mtl::hw::field<smp, 0, 3> {
+                struct smp : mtl::hw::field<smpr, 0, 3> {
                     using option = mtl::hw::option<smp>;
                     constexpr static option cycles_1_5 = 0;
                     constexpr static option cycles_7_5 = 1;
@@ -277,5 +276,8 @@ namespace devices {
         };
     } // namespace descriptor
 
-    using adc = descriptor::adc<0x40012400>;
-} // namespace devices
+    using adc1 = descriptor::adc<0x40012400>;
+
+    template <class> struct adc;
+    template <> struct adc<mtl::hw::ids::adc1> : adc1 {};
+} // namespace mtl::hw
