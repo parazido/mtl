@@ -2,9 +2,10 @@
 
 #include <cstdint>
 
+#include <mtl/hw/descriptor.hpp>
 #include <mtl/hw/device.hpp>
 
-namespace devices {
+namespace mtl::hw {
     namespace descriptor {
         template <uint32_t v_base_address> struct timer_1_8 {
             constexpr static uint32_t base_address = v_base_address;
@@ -723,8 +724,8 @@ namespace devices {
 
                 struct cc1np : mtl::hw::field<ccer, 3, 1> {
                     using option = mtl::hw::option<cc1np>;
-                    constexpr static option high = 0;
-                    constexpr static option low = 1;
+                    constexpr static option non_inverted = 0;
+                    constexpr static option inverted = 1;
                 };
 
                 struct cc2e : mtl::hw::field<ccer, 4, 1> {
@@ -747,8 +748,8 @@ namespace devices {
 
                 struct cc2np : mtl::hw::field<ccer, 7, 1> {
                     using option = mtl::hw::option<cc2np>;
-                    constexpr static option high = 0;
-                    constexpr static option low = 1;
+                    constexpr static option non_inverted = 0;
+                    constexpr static option inverted = 1;
                 };
 
                 struct cc3e : mtl::hw::field<ccer, 8, 1> {
@@ -771,8 +772,8 @@ namespace devices {
 
                 struct cc3np : mtl::hw::field<ccer, 11, 1> {
                     using option = mtl::hw::option<cc3np>;
-                    constexpr static option high = 0;
-                    constexpr static option low = 1;
+                    constexpr static option non_inverted = 0;
+                    constexpr static option inverted = 1;
                 };
 
                 struct cc4e : mtl::hw::field<ccer, 12, 1> {
@@ -795,8 +796,8 @@ namespace devices {
 
                 struct cc4np : mtl::hw::field<ccer, 15, 1> {
                     using option = mtl::hw::option<cc4np>;
-                    constexpr static option high = 0;
-                    constexpr static option low = 1;
+                    constexpr static option non_inverted = 0;
+                    constexpr static option inverted = 1;
                 };
             };
 
@@ -1187,7 +1188,7 @@ namespace devices {
                 struct tg : mtl::hw::field<egr, 6, 1> {
                     using option = mtl::hw::option<tg>;
                     constexpr static option set = 1;
-                } ж
+                };
             };
 
             struct ccmr1 : register_<0x18, uint32_t> {
@@ -2150,4 +2151,20 @@ namespace devices {
     using timer12 = descriptor::timer_9_12<0x40001800>;
     using timer13 = descriptor::timer_10_14<0x40001c00>;
     using timer14 = descriptor::timer_10_14<0x40002000>;
-} // namespace devices
+
+    template <class> struct timer;
+    template <> struct timer<mtl::hw::ids::timer1> : timer1 {};
+    template <> struct timer<mtl::hw::ids::timer2> : timer2 {};
+    template <> struct timer<mtl::hw::ids::timer3> : timer3 {};
+    template <> struct timer<mtl::hw::ids::timer4> : timer4 {};
+    template <> struct timer<mtl::hw::ids::timer5> : timer5 {};
+    template <> struct timer<mtl::hw::ids::timer6> : timer6 {};
+    template <> struct timer<mtl::hw::ids::timer7> : timer7 {};
+    template <> struct timer<mtl::hw::ids::timer8> : timer8 {};
+    template <> struct timer<mtl::hw::ids::timer9> : timer9 {};
+    template <> struct timer<mtl::hw::ids::timer10> : timer10 {};
+    template <> struct timer<mtl::hw::ids::timer11> : timer11 {};
+    template <> struct timer<mtl::hw::ids::timer12> : timer12 {};
+    template <> struct timer<mtl::hw::ids::timer13> : timer13 {};
+    template <> struct timer<mtl::hw::ids::timer14> : timer14 {};
+} // namespace mtl::hw
