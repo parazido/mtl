@@ -6,7 +6,7 @@
 
 #include <mtl/hw/device.hpp>
 
-namespace devices {
+namespace mtl::hw {
     namespace descriptor {
         template <uint32_t v_base_address> struct wwdg {
             constexpr static uint32_t base_address = v_base_address;
@@ -52,4 +52,4 @@ namespace devices {
     } // namespace descriptor
 
     using wwdg = descriptor::wwdg<0x40002c00>;
-} // namespace devices
+} // namespace mtl::hw
