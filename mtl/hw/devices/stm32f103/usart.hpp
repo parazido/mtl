@@ -6,7 +6,7 @@
 
 #include <mtl/hw/device.hpp>
 
-namespace devices {
+namespace mtl::hw {
     namespace descriptor {
         template <uint32_t v_base_address> struct usart {
             constexpr static uint32_t base_address = v_base_address;
@@ -76,7 +76,7 @@ namespace devices {
             };
 
             struct dr : register_<0x04, uint32_t> {
-                struct dr : mtl::hw::field<dr, 0, 9> {};
+                struct d : mtl::hw::field<dr, 0, 9> {};
             };
 
             struct brr : register_<0x08, uint32_t> {
@@ -170,7 +170,7 @@ namespace devices {
 
             struct cr2 : register_<0x10, uint32_t> {
                 struct add : mtl::hw::field<cr2, 0, 3> {};
-                
+
                 struct lbdl : mtl::hw::field<cr2, 5, 1> {
                     using option = mtl::hw::option<lbdl>;
                     constexpr static option bit10 = 0;
@@ -284,7 +284,7 @@ namespace devices {
                 };
 
                 struct ctsie : mtl::hw::field<cr3, 10, 1> {
-                    using option = mtl::hw::option<ctsie0>;
+                    using option = mtl::hw::option<ctsie>;
                     constexpr static option disabled = 0;
                     constexpr static option enabled = 1;
                 };
@@ -302,4 +302,11 @@ namespace devices {
     using usart3 = descriptor::usart<0x40004800>;
     using uart4 = descriptor::usart<0x40004c00>;
     using uart5 = descriptor::usart<0x40005000>;
-} // namespace devices
+
+    template <class> struct usart;
+    template <> struct timer<mtl::hw::ids::usart1> : usart1 {};
+    template <> struct timer<mtl::hw::ids::usart2> : usart2 {};
+    template <> struct timer<mtl::hw::ids::usart3> : usart3 {};
+    template <> struct timer<mtl::hw::ids::usart4> : uart4 {};
+    template <> struct timer<mtl::hw::ids::usart5> : uart5 {};
+} // namespace mtl::hw
