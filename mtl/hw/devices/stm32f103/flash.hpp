@@ -4,7 +4,7 @@
 
 #include <mtl/hw/device.hpp>
 
-namespace devices {
+namespace mtl::hw {
     namespace descriptor {
         template <uint32_t v_base_address> struct flash {
             constexpr static uint32_t base_address = v_base_address;
@@ -17,12 +17,12 @@ namespace devices {
                     constexpr static option zero = 0;
                     constexpr static option one = 1;
                     constexpr static option two = 2;
-                }
+                };
 
                 struct prftbe : mtl::hw::field<acr, 4, 1> {
                     using option = mtl::hw::option<prftbe>;
-                    constexpr static option disable = 0;
-                    constexpr static option enable = 1;
+                    constexpr static option disabled = 0;
+                    constexpr static option enabled = 1;
                 };
 
                 struct prftbs : mtl::hw::field<acr, 5, 1> {
@@ -35,4 +35,4 @@ namespace devices {
     } // namespace descriptor
 
     using flash = descriptor::flash<0x40022000>;
-} // namespace devices
+} // namespace mtl::hw
