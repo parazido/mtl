@@ -4,7 +4,7 @@
 
 #include <mtl/hw/device.hpp>
 
-namespace devices {
+namespace mtl::hw {
     namespace descriptor {
         template <uint32_t v_base_address> struct adc {
             constexpr static uint32_t base_address = v_base_address;
@@ -86,7 +86,7 @@ namespace devices {
                     constexpr static option enabled = 1;
                 };
 
-                struct jdiscen : mtl::hw::field<cr1, 13, 3> {};
+                // struct jdiscen : mtl::hw::field<cr1, 13, 3> {};
 
                 struct dualmod : mtl::hw::field<cr1, 16, 4> {
                     using option = mtl::hw::option<dualmod>;
@@ -206,7 +206,7 @@ namespace devices {
             };
 
             template <uint8_t v_reg_index> struct smpr : register_<0x04 * v_reg_index + 0x0c, uint32_t> {
-                template <uint8_t v_index> struct smp : mtl::hw::field<smp, v_index * 3, 3> {
+                template <uint8_t v_index> struct smp : mtl::hw::field<smpr, v_index * 3, 3> {
                     using option = mtl::hw::option<smp>;
                     constexpr static option cycles_1_5 = 0;
                     constexpr static option cycles_7_5 = 1;
@@ -233,29 +233,29 @@ namespace devices {
 
             template <uint8_t v_reg_index> struct sqr : register_<0x04 * v_reg_index + 0x2c, uint32_t> {
                 template <uint8_t v_index> struct sq : mtl::hw::field<sqr, v_index * 4, 4> {};
+            };
 
-                template <> struct sqr<0> : register_<0x2c, uint32_t> {
-                    template <uint8_t v_index> struct sq : mtl::hw::field<sqr, v_index * 4, 4> {};
-                    struct l : mtl::hw::field<l, 20, 4> {};
-                };
+            // template <> struct sqr<0> : register_<0x2c, uint32_t> {
+            //     template <uint8_t v_index> struct sq : mtl::hw::field<sqr, v_index * 4, 4> {};
+            //     struct l : mtl::hw::field<l, 20, 4> {};
+            // };
 
-                struct lsqr : register_<0x38, uint32_t> {
-                    template <uint8_t v_index> struct jsq : mtl::hw::field<jsqr, v_index * 5, 5> {};
-                    struct jl : mtl::hw::field<jl, 20, 2> {};
-                };
+            struct jsqr : register_<0x38, uint32_t> {
+                template <uint8_t v_index> struct jsq : mtl::hw::field<jsqr, v_index * 5, 5> {};
+                struct jl : mtl::hw::field<jsqr, 20, 2> {};
+            };
 
-                template <uint8_t v_reg_index> struct jdr : register_<0x04 * v_reg_index + 0x3c, uint32_t> {
-                    struct jdata : mtl::hw::field<jdr, 0, 16> {};
-                };
+            template <uint8_t v_reg_index> struct jdr : register_<0x04 * v_reg_index + 0x3c, uint32_t> {
+                struct jdata : mtl::hw::field<jdr, 0, 16> {};
+            };
 
-                struct dr : register_<0x4c, uint32_t> {
-                    struct data : mtl::hw::field<dr, 0, 16> {};
-                    struct adc2data : mtl::hw::field<dr, 16, 16> {};
-                };
+            struct dr : register_<0x4c, uint32_t> {
+                struct data : mtl::hw::field<dr, 0, 16> {};
+                struct adc2data : mtl::hw::field<dr, 16, 16> {};
             };
         };
-    } // namespace descriptor
+    }; // namespace descriptor
 
     using adc1 = descriptor::adc<0x40012400>;
     using adc2 = descriptor::adc<0x40012800>;
-} // namespace devices
+} // namespace mtl::hw
