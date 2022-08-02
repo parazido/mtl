@@ -4,7 +4,7 @@
 
 #include <mtl/hw/device.hpp>
 
-namespace devices {
+namespace mtl::hw {
     namespace descriptor {
         template <uint32_t v_base_address> struct rcc {
             constexpr static uint32_t base_address = v_base_address;
@@ -16,37 +16,35 @@ namespace devices {
                     using option = mtl::hw::option<hsion>;
                     constexpr static option off = 0;
                     constexpr static option on = 1;
-                }
+                };
 
                 struct hsirdy : mtl::hw::field<cr, 1, 1> {
                     using option = mtl::hw::option<hsirdy>;
                     constexpr static option not_ready = 0;
                     constexpr static option ready = 1;
-                }
+                };
 
-                struct hsitrim : mtl::hw::field<cr, 3, 5> {
-                }
+                struct hsitrim : mtl::hw::field<cr, 3, 5> {};
 
-                struct hsical : mtl::hw::field<cr, 8, 8> {
-         struct hsi14cal : mtl::hw::field<cr2, 8, 8> {};       }
+                struct hsical : mtl::hw::field<cr, 8, 8> {};
 
                 struct hseon : mtl::hw::field<cr, 16, 1> {
                     using option = mtl::hw::option<hseon>;
                     constexpr static option off = 0;
                     constexpr static option on = 1;
-                }
+                };
 
                 struct hserdy : mtl::hw::field<cr, 17, 1> {
                     using option = mtl::hw::option<hserdy>;
                     constexpr static option not_ready = 0;
                     constexpr static option ready = 1;
-                }
+                };
 
                 struct hsebyp : mtl::hw::field<cr, 18, 1> {
                     using option = mtl::hw::option<hsebyp>;
                     constexpr static option not_bypassed = 0;
                     constexpr static option bypassed = 1;
-                }
+                };
 
                 struct csson : mtl::hw::field<cr, 19, 1> {
                     using option = mtl::hw::option<csson>;
@@ -97,7 +95,7 @@ namespace devices {
                 };
 
                 struct ppre : mtl::hw::field<cfgr, 8, 3> {
-                    using option = mtl::hw::option<ppre1>;
+                    using option = mtl::hw::option<ppre>;
                     constexpr static option no = 0;
                     constexpr static option div2 = 4;
                     constexpr static option div4 = 5;
@@ -198,7 +196,7 @@ namespace devices {
                 };
 
                 struct v18pwrrstf : mtl::hw::field<csr, 23, 1> {
-                    using option = mtl::hw::option<rmvf>;
+                    using option = mtl::hw::option<v18pwrrstf>;
                     constexpr static option inactive = 0;
                     constexpr static option active = 1;
                 };
@@ -209,7 +207,7 @@ namespace devices {
                 };
 
                 struct oblrstf : mtl::hw::field<csr, 25, 1> {
-                    using option = mtl::hw::option<rmvf>;
+                    using option = mtl::hw::option<oblrstf>;
                     constexpr static option inactive = 0;
                     constexpr static option active = 1;
                 };
@@ -304,12 +302,6 @@ namespace devices {
                     constexpr static option pll = 1;
                 };
 
-                struct usbsw : mtl::hw::field<cfgr3, 7, 1> {
-                    using option = mtl::hw::option<usbsw>;
-                    constexpr static option hsi48 = 0;
-                    constexpr static option pll = 1;
-                };
-
                 struct usart2sw : mtl::hw::field<cfgr3, 16, 2> {
                     using option = mtl::hw::option<usart2sw>;
                     constexpr static option pclk = 0;
@@ -368,4 +360,4 @@ namespace devices {
     } // namespace descriptor
 
     using rcc = descriptor::rcc<0x40021000>;
-} // namespace devices
+} // namespace mtl::hw
