@@ -2,9 +2,10 @@
 
 #include <cstdint>
 
+#include <mtl/hw/descriptor.hpp>
 #include <mtl/hw/device.hpp>
 
-namespace devices {
+namespace mtl::hw {
     namespace descriptor {
         template <uint32_t v_base_address> struct dma {
             constexpr static uint32_t base_address = v_base_address;
@@ -103,7 +104,7 @@ namespace devices {
                 };
 
                 struct mirc : mtl::hw::field<ccr, 7, 1> {
-                    using option = mtl::hw::option<minc>;
+                    using option = mtl::hw::option<mirc>;
                     constexpr static option disabled = 0;
                     constexpr static option enabled = 1;
                 };
@@ -147,6 +148,10 @@ namespace devices {
         };
     } // namespace descriptor
 
-    using dma = descriptor::dma<0x40020000>;
+    using dma1 = descriptor::dma<0x40020000>;
     using dma2 = descriptor::dma<0x40020400>;
-} // namespace devices
+
+    template <class t_device_id> struct dma;
+    template <> struct dma<mtl::hw::ids::dma1> : dma1 {};
+    template <> struct dma<mtl::hw::ids::dma2> : dma2 {};
+} // namespace mtl::hw
