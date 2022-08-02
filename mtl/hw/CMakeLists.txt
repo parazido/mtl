@@ -16,9 +16,10 @@ set(SOURCE_LIST
 
 if(DEFINED TARGET_PLATFORM)
     set(LOCAL_PLATFORMS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/devices")
+    set(LOCAL_GENERIC_PLATFORMS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/generic")
     
     if(DEFINED TARGET_PLATFORM_DIR)
-        set(MODULE_TARGET_PLATFORM_DIR "${TARGET_PLATFORM_DIR}/mtl/hw/device")
+        set(MODULE_TARGET_PLATFORM_DIR "${TARGET_PLATFORM_DIR}/mtl/hw")
         if(EXISTS ${MODULE_TARGET_PLATFORM_DIR})
             file(REMOVE_RECURSE ${MODULE_TARGET_PLATFORM_DIR})
         endif()
@@ -27,17 +28,41 @@ if(DEFINED TARGET_PLATFORM)
         message(FATAL_ERROR "Directory for platform specific code must be defined.")
     endif()
 
-    message("${TARGET_PLATFORM}")
     if("${TARGET_PLATFORM}" STREQUAL "STM32F072")
         set(LOCAL_PLATFORM_DIR "${LOCAL_PLATFORMS_DIR}/stm32f072")
+        set(LOCAL_PLATFORM_NAME "stm32f072")
+        set(LOCAL_GENERIC_PLATFORM_DIR "${LOCAL_GENERIC_PLATFORMS_DIR}/cortex_m0")
+        set(LOCAL_GENERIC_PLATFORM_NAME "cortex_m0")
     elseif("${TARGET_PLATFORM}" STREQUAL "STM32F103")
         set(LOCAL_PLATFORM_DIR "${LOCAL_PLATFORMS_DIR}/stm32f103")
+        set(LOCAL_PLATFORM_NAME "stm32f103")
+        set(LOCAL_GENERIC_PLATFORM_DIR "${LOCAL_GENERIC_PLATFORMS_DIR}/cortex_m3")
+        set(LOCAL_GENERIC_PLATFORM_NAME "cortex_m3")
     else()
         message(FATAL_ERROR "Unknown target platform defined (${TARGET_PLATFORM}).")
     endif()
     
-    file(GLOB_RECURSE FLS "${LOCAL_PLATFORM_DIR}/*.*")
-    file(COPY "${LOCAL_PLATFORM_DIR}/" DESTINATION ${MODULE_TARGET_PLATFORM_DIR})
+    file(GLOB files "${LOCAL_PLATFORM_DIR}/*.hpp")
+    foreach(file ${files})
+        get_filename_component(FILE_NAME "${file}" NAME)
+        write_file(
+            "${MODULE_TARGET_PLATFORM_DIR}/${FILE_NAME}"
+            "#pragma once\n\n"
+            "#include <mtl/hw/devices/${LOCAL_PLATFORM_NAME}/${FILE_NAME}>"
+        )
+        list(APPEND SOURCE_LIST "${MODULE_TARGET_PLATFORM_DIR}/${FILE_NAME}")
+    endforeach()
+
+    file(GLOB files "${LOCAL_GENERIC_PLATFORM_DIR}/*.hpp")
+    foreach(file ${files})
+        get_filename_component(FILE_NAME "${file}" NAME)
+        write_file(
+            "${MODULE_TARGET_PLATFORM_DIR}/${FILE_NAME}"
+            "#pragma once\n\n"
+            "#include <mtl/hw/generic/${LOCAL_GENERIC_PLATFORM_NAME}/${FILE_NAME}>"
+        )
+        list(APPEND SOURCE_LIST "${MODULE_TARGET_PLATFORM_DIR}/${FILE_NAME}")
+    endforeach()
     
     list(APPEND INCLUDE_DIRS "${MODULE_TARGET_PLATFORM_DIR}")
 endif()
@@ -50,7 +75,7 @@ target_include_directories(
     $<BUILD_INTERFACE:${INCLUDE_DIRS}>
     $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 
-target_link_libraries(${LIBRARY} INTERFACE mtl::algorithm)
+# target_link_libraries(${LIBRARY} INTERFACE mtl::algorithm)
 
 # Configure testing project.
 if(USE_TESTS)
