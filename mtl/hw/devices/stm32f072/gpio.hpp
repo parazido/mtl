@@ -4,7 +4,7 @@
 
 #include <mtl/hw/device.hpp>
 
-namespace devices {
+namespace mtl::hw {
     namespace descriptor {
         template <uint32_t v_base_address> struct gpio {
             constexpr static unsigned int base_address = v_base_address;
@@ -126,4 +126,12 @@ namespace devices {
     using gpiod = descriptor::gpio<0x48000C00>;
     using gpioe = descriptor::gpio<0x48001000>;
     using gpiof = descriptor::gpio<0x48001400>;
-} // namespace devices
+
+    template <class t_device_id> struct gpio;
+    template <> struct gpio<mtl::hw::ids::gpioa> : gpioa {};
+    template <> struct gpio<mtl::hw::ids::gpiob> : gpiob {};
+    template <> struct gpio<mtl::hw::ids::gpioc> : gpioc {};
+    template <> struct gpio<mtl::hw::ids::gpiod> : gpiod {};
+    template <> struct gpio<mtl::hw::ids::gpioe> : gpioe {};
+    template <> struct gpio<mtl::hw::ids::gpiof> : gpiof {};
+} // namespace mtl::hw
