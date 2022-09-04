@@ -14,6 +14,7 @@ set(SOURCE_LIST
     ${CMAKE_CURRENT_SOURCE_DIR}/apply.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/isin.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/list.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/map.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/types.hpp)
 target_sources(${LIBRARY} INTERFACE ${SOURCE_LIST})
 
