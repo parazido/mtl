@@ -3,6 +3,9 @@
 #include <cstddef>
 #include <type_traits>
 
+#include <mtl/traits/accumulate.hpp>
+#include <mtl/traits/apply.hpp>
+
 namespace mtl::traits {
     namespace detail {
         template <class t_entry, class... t_entries> struct entry_in_list {
@@ -50,7 +53,28 @@ namespace mtl::traits {
         using type = typename find_by_index<v_index - 1, typename t_list::next>::type;
     };
 
-    template <class t_list> struct find_by_index<0, t_list> {
-        using type = typename t_list::type;
+    template <class t_list> struct find_by_index<0, t_list> { using type = typename t_list::type; };
+
+    // Apply operator to list elements.
+    template <class... t_elements, template <class> class t_operator>
+    struct apply<mtl::traits::list<t_elements...>, t_operator> {
+        using type = mtl::traits::list<typename t_operator<t_elements>::type...>;
     };
+
+    // Accumulate list elements.
+    template <template <class, class> class t_operator, class t_initial, class t_first, class... t_rest>
+    struct accumulate<mtl::traits::list<t_first, t_rest...>, t_initial, t_operator> {
+        using type = typename accumulate<mtl::traits::list<t_rest...>, typename t_operator<t_initial, t_first>::type, t_operator>::type;
+    };
+
+    template <template <class, class> class t_operator, class t_initial, class t_last>
+    struct accumulate<mtl::traits::list<t_last>, t_initial, t_operator> {
+        using type = typename t_operator<t_initial, t_last>::type;
+    };
+
+    template <template <class, class> class t_operator, class t_initial>
+    struct accumulate<mtl::traits::list<>, t_initial, t_operator> {
+        using type = t_initial;
+    };
+
 } // namespace mtl::traits
