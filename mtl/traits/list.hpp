@@ -5,6 +5,7 @@
 
 #include <mtl/traits/accumulate.hpp>
 #include <mtl/traits/apply.hpp>
+#include <mtl/traits/isin.hpp>
 
 namespace mtl::traits {
     namespace detail {
@@ -41,9 +42,6 @@ namespace mtl::traits {
         constexpr static size_t length = 0;
     };
 
-    // Checks if type is in container.
-    template <class...> struct is_in;
-
     template <class t_type, class... t_list_types> struct is_in<list<t_list_types...>, t_type> {
         constexpr static bool value = (std::is_same<t_list_types, t_type>::value | ...);
     };
@@ -64,7 +62,8 @@ namespace mtl::traits {
     // Accumulate list elements.
     template <template <class, class> class t_operator, class t_initial, class t_first, class... t_rest>
     struct accumulate<mtl::traits::list<t_first, t_rest...>, t_initial, t_operator> {
-        using type = typename accumulate<mtl::traits::list<t_rest...>, typename t_operator<t_initial, t_first>::type, t_operator>::type;
+        using type = typename accumulate<mtl::traits::list<t_rest...>, typename t_operator<t_initial, t_first>::type,
+                                         t_operator>::type;
     };
 
     template <template <class, class> class t_operator, class t_initial, class t_last>
