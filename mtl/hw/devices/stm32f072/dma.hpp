@@ -103,8 +103,8 @@ namespace mtl::hw {
                     constexpr static option enabled = 1;
                 };
 
-                struct mirc : mtl::hw::field<ccr, 7, 1> {
-                    using option = mtl::hw::option<mirc>;
+                struct minc : mtl::hw::field<ccr, 7, 1> {
+                    using option = mtl::hw::option<minc>;
                     constexpr static option disabled = 0;
                     constexpr static option enabled = 1;
                 };
