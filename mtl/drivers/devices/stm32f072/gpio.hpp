@@ -101,68 +101,58 @@ namespace mtl::drivers {
             pair<device_type_signal<types::usart, signal::rts>,
                  port_configuration<function::device_control, ppod::push_pull, pupd::floating, speed::very_high>>,
             pair<device_type_signal<types::usart, signal::cts>,
-                 port_configuration<function::user_in, ppod::push_pull, pupd::pull_up, speed::very_high>>>;
+                 port_configuration<function::user_in, ppod::push_pull, pupd::pull_up, speed::very_high>>,
+            // ADC.
+            pair<device_type_signal<types::adc, void>, port_configuration<function::analog, ppod::push_pull, pupd::floating, speed::low>>>;
     } // namespace detail
 
     template <class... t_parameters> class gpio {
     public:
         using sys = typename mtl::parameters<t_parameters...>::template find_type<mtl::sys>::type;
         using link = typename mtl::parameters<t_parameters...>::template find_type<mtl::hw::link>::type;
-        using device_id = typename link::io::port;
-        using device_type = device_type_by_id<device_id>;
-        using linked_device_id = typename link::device_signal::device;
-        using linked_device_type = device_type_by_id<linked_device_id>;
-        using linked_device_signal = typename link::device_signal::signal;
+        using device = typename link::io::port;
         using port_values = typename detail::defaul_port_configuration::find<
-            detail::device_type_signal<linked_device_type, linked_device_signal>>::type::value;
+            detail::device_type_signal<device_type_by_id<typename link::device_signal::device>,
+                                       typename link::device_signal::signal>>::type::value;
+        // // using device_type = device_type_by_id<device_id>;
+        // // using linked_device_id = typename link::device_signal::device;
+        // // using linked_device_type = device_type_by_id<linked_device_id>;
+        // // using linked_device_signal = typename link::device_signal::signal;
+        // // using port_values = typename detail::defaul_port_configuration::find<
+        // //     detail::device_type_signal<linked_device_type, linked_device_signal>>::type::value;
         constexpr static gpio_::function_ function = port_values::function;
         constexpr static gpio_::ppod_ ppod = port_values::ppod;
-        constexpr static bool is_controlled_by_device = function == gpio_::function_::device_control;
-        constexpr static bool is_analog = function == gpio_::function_::analog;
+        constexpr static gpio_::pupd_ pupd = port_values::pupd;
+        constexpr static gpio_::speed_ speed = port_values::speed;
+        // constexpr static bool is_controlled_by_device = function == gpio_::function_::device_control;
+        // constexpr static bool is_analog = function == gpio_::function_::analog;
         constexpr static uint8_t index = link::io::index;
-        using registers = mtl::hw::gpio<device_id>;
+        using registers = mtl::hw::gpio<device>;
 
         bool open() {
             // Enable port.
-            sys::template enable<device_id>();
+            sys::template enable<device>();
 
             // Configure ports.
             if constexpr (function == gpio_::function_::user_in) {
                 // Configure mode.
-                if constexpr (index < 8) {
-                    registers::crl::template mode<index>::set(registers::crl::template mode<index>::input);
-                    registers::crl::template cnf_in<index>::set(registers::crl::template cnf_in<index>::floating);
-                } else {
-                    registers::crh::template mode<index - 8>::set(registers::crh::template mode<index>::input);
-                    registers::crh::template cnf_in<index - 8>::set(registers::crh::template cnf_in<index>::floating);
-                }
+                registers::moder::template moder<index>::set(registers::moder::template mode<index>::input);
+                registers::moder::template moder<index>::set(registers::moder::template cnf_in<index>::floating);
             } else if (function == gpio_::function_::user_out) {
                 static_assert("User output mode is not supported.");
             } else if (function == gpio_::function_::device_control) {
                 // Configure mode.
-                if constexpr (index < 8) {
-                    registers::crl::template mode<index>::set(registers::crl::template mode<index>::output_50mhz);
-                    if constexpr (ppod == gpio_::ppod_::push_pull) {
-                        registers::crl::template cnf_out<index>::set(
-                            registers::crl::template cnf_out<index>::alternate_pp);
-                    } else {
-                        registers::crl::template cnf_out<index>::set(
-                            registers::crl::template cnf_out<index>::alternate_od);
-                    }
-                } else {
-                    registers::crh::template mode<index - 8>::set(
-                        registers::crh::template mode<index - 8>::output_50mhz);
-                    if constexpr (ppod == gpio_::ppod_::push_pull) {
-                        registers::crh::template cnf_out<index - 8>::set(
-                            registers::crh::template cnf_out<index - 8>::alternate_pp);
-                    } else {
-                        registers::crh::template cnf_out<index - 8>::set(
-                            registers::crh::template cnf_out<index - 8>::alternate_od);
-                    }
-                }
-                //} else if (function == function::analog) {
-                //    registers::moder::set(static_cast<std::underlying_type<function>::type>(function) << 2 *
-                //    index);
+                registers::moder::set(
+                    static_cast<std::underlying_type<decltype(function)>::type>(function) << 2 * index);
+                registers::ospeedr::set(
+                    static_cast<std::underlying_type<decltype(speed)>::type>(speed) << 2 * index);
+                registers::otyper::set(
+                    static_cast<std::underlying_type<decltype(ppod)>::type>(ppod) << index);
+                registers::pupdr::set(
+                    static_cast<std::underlying_type<decltype(pupd)>::type>(pupd) << 2 * index);
+            } else if (function == gpio_::function_::analog) {
+                registers::moder::set(
+                    static_cast<std::underlying_type<decltype(function)>::type>(function) << 2 * index);
             } else {
                 static_assert("Unknown operation mode selected.");
             }
@@ -185,9 +175,9 @@ namespace mtl::drivers {
         }
 
     private:
-        mtl::tuple<gpio<sys, t_links>...> m_gpios;
+        mtl::tuple<gpio<sys, t_links>...> m_gpios{gpio<sys, t_links>()...};
     };
 
     template <class sys, template <class...> class t_container, class... t_links>
-    class gpios<t_container<t_links...>> : public gpios<sys, t_links...> {};
+    class gpios<sys, t_container<t_links...>> : public gpios<sys, t_links...> {};
 } // namespace mtl::drivers
