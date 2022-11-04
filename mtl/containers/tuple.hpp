@@ -24,6 +24,8 @@ namespace mtl {
         public:
             using types = mtl::traits::list<t_parameters...>;
             constexpr static size_t size = types::length;
+
+            tuple() : tuple_leaf<v_indexes, t_parameters>()... {}
             
             tuple(t_parameters &&... values)
                 : tuple_leaf<v_indexes, t_parameters>(std::forward<t_parameters>(values))... {}
@@ -44,7 +46,7 @@ namespace mtl {
     } // namespace detail
 
     template <class... t_parameters>
-    using tuple = detail::tuple<std::make_index_sequence<sizeof...(t_parameters)>, t_parameters...>;
+    using tuple = detail::tuple<std::index_sequence_for<t_parameters...>, t_parameters...>;
 
     template <size_t v_index, class... t_parameters> auto &get(tuple<t_parameters...> &value) {
         return value.template get<v_index>();
