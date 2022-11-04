@@ -34,15 +34,15 @@ namespace mtl::drivers {
         //                               enclosing<::devices::dma1::ccr<3>::msize::bits8.value()>,
         //                               enclosing<::devices::dma1::ccr<3>::pl::low.value()>, enclosing<0x40004428>> {};
 
-        // template <>
-        // struct default_dma_configuration<::devices::device_signal<::devices::ids::adc, void>> :
-        //     default_dma_configuration<enclosing<::devices::dma1::ccr<0>::dir::from_peripheral.value()>,
-        //                               enclosing<::devices::dma1::ccr<0>::pinc::disabled.value()>,
-        //                               enclosing<::devices::dma1::ccr<0>::minc::disabled.value()>,
-        //                               enclosing<::devices::dma1::ccr<0>::psize::bits16.value()>,
-        //                               enclosing<::devices::dma1::ccr<0>::msize::bits16.value()>,
-        //                               enclosing<::devices::dma1::ccr<0>::pl::medium.value()>, enclosing<0x40012440>>
-        //                               {};
+        template <>
+        struct default_dma_configuration<mtl::hw::device_signal<mtl::hw::ids::adc1, void>> :
+            default_dma_configuration<enclosing<mtl::hw::dma1::ccr<0>::dir::from_peripheral.value()>,
+                                      enclosing<mtl::hw::dma1::ccr<0>::pinc::disabled.value()>,
+                                      enclosing<mtl::hw::dma1::ccr<0>::minc::disabled.value()>,
+                                      enclosing<mtl::hw::dma1::ccr<0>::psize::bits16.value()>,
+                                      enclosing<mtl::hw::dma1::ccr<0>::msize::bits16.value()>,
+                                      enclosing<mtl::hw::dma1::ccr<0>::pl::medium.value()>, enclosing<0x40012440>>
+                                      {};
 
         template <class t_device_id, uint8_t v_index> struct dma_channel {
             using device_id = t_device_id;
@@ -126,7 +126,7 @@ namespace mtl::drivers {
         using device_signal = typename mtl::parameters<t_parameters...>::find_type<mtl::hw::device_signal>::type;
         using dma_channel = typename get_dma_channel<device_signal>::type;
         using device_id = typename dma_channel::device_id;
-        using interrupt = typename detail::dma_interrupts::template find<dma_channel>::type;
+        using interrupt = typename detail::dma_interrupts::template find<dma_channel>::type::value;
         using registers = mtl::hw::dma<device_id>;
         constexpr static uint8_t channel_index = dma_channel::index;
 
