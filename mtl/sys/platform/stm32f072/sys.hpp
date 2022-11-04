@@ -180,5 +180,9 @@ namespace mtl {
             // __asm volatile ("bx		lr");
             return reinterpret_cast<uint32_t *>(0)[0];
         }
+
+        template <class t_device_id>[[gnu::always_inline]] static void enable() {
+            mtl::pwr::enable<t_device_id>();
+        }
     };
 } // namespace mtl
